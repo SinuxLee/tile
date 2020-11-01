@@ -1,0 +1,7 @@
+{
+  "debugMode": true,
+  "logLevel": "debug",
+  "httpPort": 8086,
+  "nodeId": 1,
+  "consulAddr": "127.0.0.1:8500"
+}
