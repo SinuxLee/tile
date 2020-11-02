@@ -1,6 +1,6 @@
 package store
 
-import "tile/pkg/nid"
+import "github.com/sinuxlee/tile/pkg/nid"
 
 const (
 	nodeIdRoot = "nodeId/"

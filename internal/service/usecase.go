@@ -1,6 +1,6 @@
 package service
 
-import "tile/internal/store"
+import "github.com/sinuxlee/tile/internal/store"
 
 type UseCase interface {
 	GetNodeID(path, addr, service string) (int, error)

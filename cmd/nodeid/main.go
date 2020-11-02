@@ -13,12 +13,14 @@ import (
 
 // 常量定义
 const (
-	ServiceID   = 110
-	ServiceName = "nodeid"
+	serviceID   = 110
+	serviceName = "nodeid"
 )
 
 func main() {
 	srv, err := app.New(
+		app.ServiceID(serviceID),
+		app.ServiceName(serviceName),
 		app.Conf(),
 		app.LogLevel(),
 		app.Named(),
@@ -31,7 +33,7 @@ func main() {
 	)
 
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
+		_, _ = fmt.Fprintln(os.Stderr, err.Error())
 		return
 	}
 
@@ -45,5 +47,5 @@ func main() {
 
 	<-ch
 
-	logger.Close()
+	_ = logger.Close()
 }

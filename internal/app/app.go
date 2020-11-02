@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"os"
 
-	"tile/internal/config"
-	"tile/internal/controller"
-	"tile/internal/service"
-	"tile/internal/store"
-	"tile/pkg/logger"
-	"tile/pkg/nid"
+	"github.com/sinuxlee/tile/internal/config"
+	"github.com/sinuxlee/tile/internal/controller"
+	"github.com/sinuxlee/tile/internal/service"
+	"github.com/sinuxlee/tile/internal/store"
+	"github.com/sinuxlee/tile/pkg/logger"
+	"github.com/sinuxlee/tile/pkg/nid"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"

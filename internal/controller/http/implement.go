@@ -3,11 +3,10 @@ package http
 import (
 	"net/http"
 
-	"tile/internal/controller"
-	"tile/internal/service"
-
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	"github.com/sinuxlee/tile/internal/controller"
+	"github.com/sinuxlee/tile/internal/service"
 )
 
 // Response ...

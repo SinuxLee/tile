@@ -4,21 +4,20 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
-	"tile/pkg/logger"
-	"tile/pkg/middleware/ginx"
 	"time"
-
-	"tile/internal/config"
-	"tile/internal/controller"
-	httpCtrl "tile/internal/controller/http"
-	"tile/internal/service"
-	"tile/internal/store"
-	"tile/pkg/nid"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/sinuxlee/tile/internal/config"
+	"github.com/sinuxlee/tile/internal/controller"
+	httpCtrl "github.com/sinuxlee/tile/internal/controller/http"
+	"github.com/sinuxlee/tile/internal/service"
+	"github.com/sinuxlee/tile/internal/store"
+	"github.com/sinuxlee/tile/pkg/logger"
+	"github.com/sinuxlee/tile/pkg/middleware/ginx"
+	"github.com/sinuxlee/tile/pkg/nid"
 )
 
 // Option ...
