@@ -71,7 +71,7 @@ func (w *fileWriter) getFile() *os.File {
 }
 
 func (w *fileWriter) fileName(tm *time.Time) string {
-	return path.Join(w.dir, fmt.Sprintf("%v_%v", tm.Format(nameFormat), w.name+w.ext))
+	return path.Join(w.dir, fmt.Sprintf("%v_%v", w.name, tm.Format(nameFormat)+w.ext))
 }
 
 func (w *fileWriter) isExist(path string) bool {
