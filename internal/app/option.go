@@ -31,6 +31,7 @@ func ServiceName(name string) Option {
 	}
 }
 
+// ServiceID ...
 func ServiceID(ID int) Option {
 	return func(a *app) (err error) {
 		a.serviceID = ID

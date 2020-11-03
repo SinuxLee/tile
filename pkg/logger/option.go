@@ -21,9 +21,11 @@ type Options struct {
 	dir     string // 日志目录
 	name    string // 日志文件名
 	ext     string // 后缀名
+	level   string // 日志等级
 	console bool   // 开启 console 日志
 	file    bool   // 开启文件日志
-	level   string // 日志等级
+	pid     bool   // 显示进程id
+	caller  bool   // 显示源文件及行数
 }
 
 // Option ...
@@ -59,5 +61,17 @@ func Console(open bool) Option {
 func File(open bool) Option {
 	return func(o *Options) {
 		o.file = open
+	}
+}
+
+func Pid(open bool) Option {
+	return func(o *Options) {
+		o.pid = open
+	}
+}
+
+func Caller(open bool) Option {
+	return func(o *Options) {
+		o.caller = open
 	}
 }

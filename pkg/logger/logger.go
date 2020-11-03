@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"time"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/diode"
 	"github.com/rs/zerolog/log"
+)
+
+const (
+	timeFormat = "2006-01-02 15:04:05.000 Z07:00"
 )
 
 var (
@@ -22,15 +25,30 @@ func Init(opt ...Option) {
 	for _, o := range opt {
 		o(options)
 	}
-
+	// 配置日志
 	setLevel(options)
+	zerolog.MessageFieldName = "msg"
+	zerolog.LevelFieldName = "lvl"
+	zerolog.TimeFieldFormat = timeFormat
 
+	// 指定日志输出的位置
 	writers := make([]io.Writer, 0, 2)
 	setConsole(options, &writers)
 	diodeCloser = setFile(options, &writers)
 	multiWriter := zerolog.MultiLevelWriter(writers...)
 
-	log.Logger = zerolog.New(multiWriter).With().Int("pid", os.Getpid()).Timestamp().Caller().Logger()
+	// 设置日志中常用属性
+	ctx := zerolog.New(multiWriter).With().Timestamp()
+	if options.pid {
+		ctx = ctx.Int("pid", os.Getpid())
+	}
+
+	if options.caller {
+		ctx = ctx.Caller()
+	}
+
+	// 修改全局日志
+	log.Logger = ctx.Logger()
 	log.Info().Msg("log init success")
 }
 
@@ -61,7 +79,7 @@ func setLevel(options *Options) {
 
 func setConsole(options *Options, writers *[]io.Writer) {
 	if options.console {
-		console := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
+		console := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: timeFormat}
 		*writers = append(*writers, console)
 	}
 }
