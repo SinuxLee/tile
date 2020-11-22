@@ -17,7 +17,7 @@ func main() {
 		go func(i int) {
 			for {
 				log.Info().Int("id", i).Msg("test")
-				time.Sleep(time.Millisecond * 50)
+				time.Sleep(time.Second)
 			}
 
 		}(i)

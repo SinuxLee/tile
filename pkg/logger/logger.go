@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	timeFormat = "2006-01-02 15:04:05.000 Z07:00"
+	timeFormat = "2006-01-02 15:04:05.000"
 )
 
 var (

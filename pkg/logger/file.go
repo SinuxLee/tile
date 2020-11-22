@@ -21,11 +21,12 @@ func newFileWriter(dir, name, ext string) io.Writer {
 }
 
 type fileWriter struct {
-	dir     string
-	name    string
-	ext     string
-	markDay int
-	file    *os.File
+	dir          string
+	name         string
+	ext          string
+	markDay      int
+	file         *os.File
+	fullFileName string
 }
 
 func (w *fileWriter) Write(data []byte) (n int, err error) {
@@ -50,12 +51,12 @@ func (w *fileWriter) getFile() *os.File {
 	markDay := now.YearDay()
 	if w.markDay != markDay {
 		w.markDay = markDay
-		w.name = w.fileName(&now)
+		w.fullFileName = w.fileName(&now)
 	}
-	if w.file != nil && w.isExist(w.name) {
+	if w.file != nil && w.isExist(w.fullFileName) {
 		return w.file
 	}
-	f, err := os.OpenFile(w.name, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
+	f, err := os.OpenFile(w.fullFileName, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Printf("cacheWriter create file error:%v \n", err)
 		return nil
