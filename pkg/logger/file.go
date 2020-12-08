@@ -3,21 +3,32 @@ package logger
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 const (
 	nameFormat = "2006_01_02"
 )
 
-func newFileWriter(dir, name, ext string) io.Writer {
-	return &fileWriter{
-		dir:  dir,
-		name: name,
-		ext:  ext,
+func newFileWriter(dir, name, ext string, expireDay int) io.Writer {
+	writer := &fileWriter{
+		dir:       dir,
+		name:      name,
+		ext:       ext,
+		expireDay: expireDay,
 	}
+
+	if writer.expireDay > 0 {
+		go writer.cleanExpiredFile()
+	}
+
+	return writer
 }
 
 type fileWriter struct {
@@ -27,6 +38,7 @@ type fileWriter struct {
 	markDay      int
 	file         *os.File
 	fullFileName string
+	expireDay    int
 }
 
 func (w *fileWriter) Write(data []byte) (n int, err error) {
@@ -78,4 +90,43 @@ func (w *fileWriter) fileName(tm *time.Time) string {
 func (w *fileWriter) isExist(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
+}
+
+func (w *fileWriter) cleanExpiredFile() {
+	ticker := time.NewTicker(time.Minute)
+	for {
+		select {
+		case <-ticker.C:
+			rd, err := ioutil.ReadDir(w.dir)
+			if err != nil {
+				log.Error().Err(err).Str("dir", w.dir).Msg("failed to read directory")
+				break
+			}
+
+			expiredDate := time.Now().Add(-time.Duration(w.expireDay*24) * time.Hour)
+			for _, fileDir := range rd {
+				if fileDir.IsDir() {
+					continue
+				}
+
+				fileName := fileDir.Name()
+				if !strings.HasPrefix(fileName, w.name) || !strings.HasSuffix(fileName, w.ext) {
+					continue
+				}
+
+				// Format: logger_2020_11_29.log
+				fileStrTime := strings.TrimRight(fileName, w.ext)
+				fileStrTime = strings.TrimLeft(fileStrTime, w.name+"_")
+				fileTime, err := time.Parse(nameFormat, fileStrTime)
+				if err != nil || fileTime.After(expiredDate) {
+					continue
+				}
+
+				filePath := path.Join(w.dir, fileName)
+				if err = os.Remove(filePath); err != nil {
+					log.Error().Err(err).Str("filePath", filePath).Msg("failed to remove file")
+				}
+			}
+		}
+	}
 }

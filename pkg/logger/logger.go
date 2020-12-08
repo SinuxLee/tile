@@ -86,7 +86,7 @@ func setConsole(options *Options, writers *[]io.Writer) {
 
 func setFile(options *Options, writers *[]io.Writer) io.Closer {
 	if options.file {
-		diodeWriter := diode.NewWriter(newFileWriter(options.dir, options.name, options.ext),
+		diodeWriter := diode.NewWriter(newFileWriter(options.dir, options.name, options.ext, options.expireDay),
 			500000, 0, func(missed int) {
 				fmt.Fprintf(os.Stderr, "Logger Dropped %d messages", missed)
 			})
