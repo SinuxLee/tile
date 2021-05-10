@@ -10,10 +10,10 @@ import (
 )
 
 var defaultProducerOptions = ProducerOptions{
-	ShardsCount:       10,
-	PendingBufferSize: 50000,
-	PipeBufferSize:    100,
-	PipePeriod:        time.Millisecond,
+	ShardsCount:       10,                     // 分片队列的个数
+	PendingBufferSize: 50000,                  // 本地消息缓存队列
+	PipeBufferSize:    100,                    // 每个分片队列 pipeline 个数
+	PipePeriod:        100 * time.Millisecond, // 分片队列每次发送前等待的最长时间
 }
 
 type ProducerOptions struct {

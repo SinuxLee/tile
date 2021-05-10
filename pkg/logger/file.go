@@ -17,6 +17,11 @@ const (
 )
 
 func newFileWriter(dir, name, ext string, expireDay int) io.Writer {
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		return nil
+	}
+
 	writer := &fileWriter{
 		dir:       dir,
 		name:      name,
@@ -68,7 +73,7 @@ func (w *fileWriter) getFile() *os.File {
 	if w.file != nil && w.isExist(w.fullFileName) {
 		return w.file
 	}
-	f, err := os.OpenFile(w.fullFileName, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
+	f, err := os.OpenFile(w.fullFileName, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0644)
 	if err != nil {
 		fmt.Printf("cacheWriter create file error:%v \n", err)
 		return nil

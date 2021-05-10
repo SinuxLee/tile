@@ -86,10 +86,15 @@ func setConsole(options *Options, writers *[]io.Writer) {
 
 func setFile(options *Options, writers *[]io.Writer) io.Closer {
 	if options.file {
-		diodeWriter := diode.NewWriter(newFileWriter(options.dir, options.name, options.ext, options.expireDay),
-			500000, 0, func(missed int) {
-				fmt.Fprintf(os.Stderr, "Logger Dropped %d messages", missed)
-			})
+		fwriter := newFileWriter(options.dir, options.name, options.ext, options.expireDay)
+		if fwriter == nil {
+			fmt.Fprintln(os.Stderr, "[tile.logger] Failed to create file writer")
+			return nil
+		}
+
+		diodeWriter := diode.NewWriter(fwriter, 500000, 0, func(missed int) {
+			fmt.Fprintf(os.Stderr, "[tile.logger] Logger Dropped %d messages", missed)
+		})
 
 		*writers = append(*writers, &diodeWriter)
 		return &diodeWriter

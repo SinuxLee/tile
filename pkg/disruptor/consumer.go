@@ -11,11 +11,11 @@ import (
 )
 
 var defaultConsumerOptions = ConsumerOptions{
-	ShardsCount:       10,
-	PrefetchCount:     100,
-	PendingBufferSize: 1000,
-	PipeBufferSize:    10,
-	PipePeriod:        time.Millisecond,
+	ShardsCount:       10,                     // 分片队列的个数
+	PrefetchCount:     100,                    // 每次从分片队列取消息的个数
+	PendingBufferSize: 1000,                   // 本地消息缓存队列大小，需要 >= ShardsCount*PrefetchCount
+	PipeBufferSize:    100,                    // 每个分片队列 ack pipeline 的个数
+	PipePeriod:        100 * time.Millisecond, // ack分片队列等待的最长时间
 }
 
 type ConsumerOptions struct {

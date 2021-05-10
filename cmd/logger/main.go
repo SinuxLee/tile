@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	logger.Init(logger.File(true), logger.ExpireDay(3))
+	logger.Init()
 	for i := 0; i < 10; i++ {
 		go func(i int) {
 			for {

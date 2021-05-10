@@ -8,13 +8,13 @@ import (
 
 var (
 	defaultOptions = Options{
-		dir:       filepath.Dir(os.Args[0]),
+		dir:       filepath.Join(filepath.Dir(os.Args[0]), "logs"),
 		name:      strings.TrimRight(filepath.Base(os.Args[0]), filepath.Ext(os.Args[0])),
 		ext:       ".log",
 		console:   true,
-		file:      false,
+		file:      true,
 		level:     "trace",
-		expireDay: 7,
+		expireDay: 3,
 	}
 )
 
